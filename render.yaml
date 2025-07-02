@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: whatsapp-groups-calyx-drey
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    env: node
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_PATH
+        value: /var/www/data/groups.json
+      - key: UPLOADS_DIR
+        value: /var/www/data
+    disk:
+      name: whatsapp-data
+      mountPath: /var/www/data
+      sizeGB: 1
+    healthCheckPath: /api/health
+    autoDeploy: true
