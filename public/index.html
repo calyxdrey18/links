@@ -240,6 +240,29 @@
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
 
+    .group-image-container {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background-color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .group-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .default-group-icon {
+      font-size: 3rem;
+      color: var(--primary-light);
+    }
+
     .group-name {
       font-size: 1.3rem;
       font-weight: 600;
@@ -249,16 +272,15 @@
 
     .group-user {
       color: var(--gray);
-      margin-bottom: 20px;
+      margin-bottom: 8px;
       font-size: 0.9rem;
     }
 
-    .group-image {
-      width: 100%;
-      max-height: 200px;
-      object-fit: cover;
-      border-radius: 8px;
+    .group-date {
+      color: var(--gray);
+      font-size: 0.8rem;
       margin-bottom: 15px;
+      font-style: italic;
     }
 
     .group-link {
@@ -341,7 +363,6 @@
       padding: 10px 20px;
     }
 
-    /* Responsive adjustments */
     @media (max-width: 768px) {
       .container {
         padding: 30px 20px;
@@ -356,6 +377,10 @@
       
       .subtitle {
         font-size: 1rem;
+      }
+
+      .group-image-container {
+        height: 150px;
       }
     }
   </style>
@@ -608,18 +633,43 @@
           card.className = 'group-card';
           card.style.animationDelay = `${index * 50}ms`;
           
+          // Handle image display with fallback
           let imageHtml = '';
           if (group.imagePath) {
-            const imageUrl = group.imagePath.startsWith('http') ? 
+            const isExternalImage = group.imagePath.startsWith('http');
+            const imageUrl = isExternalImage ? 
               group.imagePath : 
-              group.imagePath; // Images are served from /uploads route
-            imageHtml = `<img src="${imageUrl}" class="group-image" alt="${escapeHtml(group.groupName)}">`;
+              group.imagePath.startsWith('/') ? 
+                group.imagePath : 
+                `/${group.imagePath}`;
+            
+            imageHtml = `
+              <div class="group-image-container">
+                <img src="${imageUrl}" class="group-image" alt="${escapeHtml(group.groupName)}" 
+                  onerror="this.onerror=null;this.parentElement.innerHTML='<i class=\'fas fa-users default-group-icon\'></i>'">
+              </div>
+            `;
+          } else {
+            imageHtml = `
+              <div class="group-image-container">
+                <i class="fas fa-users default-group-icon"></i>
+              </div>
+            `;
           }
+          
+          // Format creation date
+          const createdDate = group.createdAt ? new Date(group.createdAt) : new Date();
+          const formattedDate = createdDate.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          });
           
           card.innerHTML = `
             ${imageHtml}
             <div class="group-name">${escapeHtml(group.groupName)}</div>
             <div class="group-user">Shared by: ${escapeHtml(group.username)}</div>
+            <div class="group-date">Created: ${formattedDate}</div>
             <a href="${escapeHtml(group.groupLink)}" class="group-link" target="_blank" rel="noopener noreferrer">
               <i class="fab fa-whatsapp"></i> Join Group
             </a>
@@ -675,4 +725,4 @@
     });
   </script>
 </body>
-</html>
+  </html>
