@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tech WhatsApp Groups | Connect & Share</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --secondary: #3f37c9;
+      --accent: #f72585;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --success: #4cc9f0;
+      --error: #f72585;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f5f7ff;
+      color: var(--dark);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      margin-top: 40px;
+      margin-bottom: 40px;
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 0.6s forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 10px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 40px;
+      color: var(--gray);
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-weight: 500;
+      color: var(--dark);
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="search"] {
+      padding: 14px 16px;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      color: var(--dark);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    input[type="text"]:focus,
+    input[type="url"]:focus,
+    input[type="search"]:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    .file-upload {
+      border: 2px dashed #e0e0e0;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      margin: 20px 0;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .file-upload:hover {
+      border-color: var(--primary-light);
+      background: rgba(67, 97, 238, 0.03);
+    }
+
+    .file-upload::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(67, 97, 238, 0.1), transparent);
+      transition: var(--transition);
+    }
+
+    .file-upload:hover::after {
+      left: 100%;
+    }
+
+    button {
+      padding: 16px;
+      background: var(--primary);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(67, 97, 238, 0.2);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    #formMsg {
+      text-align: center;
+      margin: 20px 0;
+      padding: 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      animation: fadeIn 0.4s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .success {
+      color: #166534;
+      background-color: #dcfce7;
+      border: 1px solid #bbf7d0;
+    }
+
+    .error {
+      color: #991b1b;
+      background-color: #fee2e2;
+      border: 1px solid #fecaca;
+    }
+
+    .search-container {
+      margin: 40px 0;
+      position: relative;
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 14px 50px 14px 20px;
+      border-radius: 50px;
+      box-shadow: var(--shadow);
+      border: none;
+    }
+
+    .search-container i {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+
+    .group-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      transform-origin: top;
+      animation: cardAppear 0.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes cardAppear {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .group-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .group-name {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--primary);
+    }
+
+    .group-user {
+      color: var(--gray);
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+
+    .group-image {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .group-link {
+      display: block;
+      padding: 12px;
+      background: var(--primary);
+      border-radius: 8px;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .group-link:hover {
+      background: var(--secondary);
+    }
+
+    #previewImg {
+      max-width: 120px;
+      max-height: 120px;
+      margin: 15px auto;
+      display: block;
+      border-radius: 8px;
+      object-fit: cover;
+      box-shadow: var(--shadow);
+      animation: fadeIn 0.5s;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .header-icon {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .loading-state, .empty-state, .error-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray);
+    }
+
+    .loading-state i {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .error-state {
+      color: var(--error);
+    }
+
+    .error-state i {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: var(--error);
+    }
+
+    .error-state button {
+      margin-top: 15px;
+      padding: 10px 20px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border-radius: 0;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-icon" style="text-align: center;">
+      <i class="fas fa-users"></i>
+    </div>
+    <h1>Tech WhatsApp Groups</h1>
+    <p class="subtitle">Connect with like-minded tech enthusiasts and grow your network</p>
+
+    <form id="groupForm" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="username">Your Username</label>
+        <input type="text" id="username" placeholder="Your name or handle" required>
+      </div>
+
+      <div class="form-group">
+        <label for="groupName">Group Name</label>
+        <input type="text" id="groupName" placeholder="e.g. React Developers" required>
+      </div>
+
+      <div class="form-group">
+        <label for="groupLink">WhatsApp Group Link</label>
+        <input type="url" id="groupLink" placeholder="https://chat.whatsapp.com/..." required>
+      </div>
+
+      <div class="file-upload">
+        <label id="fileUploadLabel">
+          <i class="fas fa-cloud-upload-alt" style="margin-right: 8px;"></i>
+          Click or drag & drop to upload a group photo (optional)
+        </label>
+        <input type="file" id="groupImage" accept="image/*" style="display: none;">
+        <img id="previewImg" style="display: none;">
+      </div>
+
+      <button type="submit" id="submitBtn">
+        <span id="btnText">Submit Group</span>
+        <span id="btnLoader" class="loading" style="display: none;"></span>
+      </button>
+      <div id="formMsg"></div>
+    </form>
+
+    <div class="search-container">
+      <input type="search" id="searchInput" placeholder="Search groups by name, topic or creator...">
+      <i class="fas fa-search"></i>
+    </div>
+
+    <div id="groupList">
+      <div class="loading-state">
+        <i class="fas fa-circle-notch fa-spin"></i>
+        <p>Loading groups...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('groupForm');
+      const searchInput = document.getElementById('searchInput');
+      const groupList = document.getElementById('groupList');
+      const formMsg = document.getElementById('formMsg');
+      const groupImageInput = document.getElementById('groupImage');
+      const previewImg = document.getElementById('previewImg');
+      const fileUpload = document.querySelector('.file-upload');
+      const fileUploadLabel = document.getElementById('fileUploadLabel');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnLoader = document.getElementById('btnLoader');
+
+      // Initialize animations
+      document.querySelector('.container').style.animation = 'fadeInUp 0.6s forwards';
+
+      // File upload handling
+      fileUpload.addEventListener('click', () => groupImageInput.click());
+
+      // Drag and drop functionality
+      fileUpload.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUpload.style.borderColor = 'var(--primary)';
+        fileUpload.style.backgroundColor = 'rgba(67, 97, 238, 0.05)';
+      });
+
+      fileUpload.addEventListener('dragleave', () => {
+        fileUpload.style.borderColor = '#e0e0e0';
+        fileUpload.style.backgroundColor = '';
+      });
+
+      fileUpload.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUpload.style.borderColor = '#e0e0e0';
+        fileUpload.style.backgroundColor = '';
+        
+        if (e.dataTransfer.files.length) {
+          groupImageInput.files = e.dataTransfer.files;
+          handleImageUpload(e.dataTransfer.files[0]);
+        }
+      });
+
+      groupImageInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          handleImageUpload(e.target.files[0]);
+        }
+      });
+
+      function handleImageUpload(file) {
+        const reader = new FileReader();
+        
+        reader.onload = (event) => {
+          previewImg.src = event.target.result;
+          previewImg.style.display = 'block';
+          fileUploadLabel.innerHTML = `
+            <i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i>
+            ${file.name}
+          `;
+        };
+        
+        reader.readAsDataURL(file);
+      }
+
+      // Form submission
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value.trim();
+        const groupName = document.getElementById('groupName').value.trim();
+        const groupLink = document.getElementById('groupLink').value.trim();
+        const imageFile = groupImageInput.files[0];
+
+        if (!username || !groupName || !groupLink) {
+          showMessage('Please fill in all required fields', 'error');
+          return;
+        }
+
+        if (!groupLink.startsWith('https://chat.whatsapp.com/')) {
+          showMessage('Please enter a valid WhatsApp group link', 'error');
+          return;
+        }
+
+        // Show loading state
+        btnText.style.display = 'none';
+        btnLoader.style.display = 'block';
+        submitBtn.disabled = true;
+
+        try {
+          const formData = new FormData();
+          formData.append('username', username);
+          formData.append('groupName', groupName);
+          formData.append('groupLink', groupLink);
+          if (imageFile) formData.append('image', imageFile);
+
+          const response = await fetch('/api/groups', {
+            method: 'POST',
+            body: formData
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            showMessage('Group added successfully!', 'success');
+            form.reset();
+            previewImg.style.display = 'none';
+            groupImageInput.value = '';
+            fileUploadLabel.innerHTML = 
+              '<i class="fas fa-cloud-upload-alt" style="margin-right: 8px;"></i>Click or drag & drop to upload a group photo (optional)';
+            
+            // Clear cache and reload
+            localStorage.removeItem('cachedGroups');
+            await loadGroups();
+          } else {
+            showMessage(result.error || 'Failed to add group', 'error');
+          }
+        } catch (error) {
+          showMessage('Network error. Please try again.', 'error');
+        } finally {
+          btnText.style.display = 'block';
+          btnLoader.style.display = 'none';
+          submitBtn.disabled = false;
+        }
+      });
+
+      // Search functionality with debounce
+      let searchTimeout;
+      searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          loadGroups(searchInput.value.trim());
+        }, 300);
+      });
+
+      // Load groups with caching
+      async function loadGroups(search = '') {
+        groupList.innerHTML = `
+          <div class="loading-state">
+            <i class="fas fa-circle-notch fa-spin"></i>
+            <p>Loading groups...</p>
+          </div>
+        `;
+        
+        try {
+          // Try to load from localStorage first if not searching
+          const cached = localStorage.getItem('cachedGroups');
+          if (cached && !search) {
+            renderGroups(JSON.parse(cached));
+          }
+
+          // Then fetch from server
+          const response = await fetchWithRetry(`/api/groups${search ? '?q=' + encodeURIComponent(search) : ''}`);
+          const groups = await response.json();
+          
+          // Cache the result if not searching
+          if (!search) {
+            localStorage.setItem('cachedGroups', JSON.stringify(groups));
+          }
+          renderGroups(groups);
+        } catch (error) {
+          showPersistentError('Failed to load groups. ' + (error.message || 'Server may be restarting. Please try again in a moment.'));
+        }
+      }
+
+      // Fetch with retry logic
+      async function fetchWithRetry(url, retries = 3) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response;
+        } catch (err) {
+          if (retries <= 0) throw err;
+          await new Promise(resolve => setTimeout(resolve, 1000 * (4 - retries)));
+          return fetchWithRetry(url, retries - 1);
+        }
+      }
+
+      // Render groups to the DOM
+      function renderGroups(groups) {
+        if (groups.length === 0) {
+          groupList.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-users-slash"></i>
+              <p>No groups found. Be the first to add one!</p>
+            </div>
+          `;
+          return;
+        }
+
+        groupList.innerHTML = '';
+        groups.forEach((group, index) => {
+          const card = document.createElement('div');
+          card.className = 'group-card';
+          card.style.animationDelay = `${index * 50}ms`;
+          
+          let imageHtml = '';
+          if (group.imagePath) {
+            const imageUrl = group.imagePath.startsWith('http') ? 
+              group.imagePath : 
+              group.imagePath; // Images are served from /uploads route
+            imageHtml = `<img src="${imageUrl}" class="group-image" alt="${escapeHtml(group.groupName)}">`;
+          }
+          
+          card.innerHTML = `
+            ${imageHtml}
+            <div class="group-name">${escapeHtml(group.groupName)}</div>
+            <div class="group-user">Shared by: ${escapeHtml(group.username)}</div>
+            <a href="${escapeHtml(group.groupLink)}" class="group-link" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-whatsapp"></i> Join Group
+            </a>
+          `;
+          groupList.appendChild(card);
+        });
+      }
+
+      // Show persistent error message
+      function showPersistentError(message) {
+        groupList.innerHTML = `
+          <div class="error-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>${message}</p>
+            <button onclick="location.reload()">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+          </div>
+        `;
+      }
+
+      // Show temporary message
+      function showMessage(msg, type) {
+        formMsg.textContent = msg;
+        formMsg.className = type;
+        formMsg.style.display = 'block';
+        
+        // Hide message after 5 seconds
+        setTimeout(() => {
+          formMsg.style.opacity = '1';
+          let opacity = 1;
+          const fadeOut = setInterval(() => {
+            opacity -= 0.1;
+            formMsg.style.opacity = opacity;
+            if (opacity <= 0) {
+              clearInterval(fadeOut);
+              formMsg.style.display = 'none';
+              formMsg.style.opacity = '1';
+            }
+          }, 100);
+        }, 5000);
+      }
+
+      // Escape HTML to prevent XSS
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // Initial load
+      loadGroups();
+    });
+  </script>
+</body>
+</html>
